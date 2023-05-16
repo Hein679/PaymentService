@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Notifications</h2>
+  <h3>Payment Requests</h3>
+  <ul>
+    {% for request in requests %}
+      <li>
+        {{ request.sender.username }} requested {{ request.amount }} {{ request.currency }} from you
+        (Status: {% if request.is_completed %}Accepted{% else %}Pending{% endif %})
+        <form method="post" action="{% url 'payment_service:accept_request' request.id %}" class="button-form">
+          {% csrf_token %}
+          <input type="submit" value="Accept" class="buttonAccept">
+        </form>
+        <form method="post" action="{% url 'payment_service:reject_request' request.id %}" class="button-form">
+          {% csrf_token %}
+          <input type="submit" value="Reject" class="buttonReject">
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+  <h3>Sent and Received Payments</h3>
+  <h6>Current Balance: {{ user.balance}} {{ user.currency}}</h3>
+  <ul>
+    {% for transaction in transactions %}
+      <li>
+        {% if transaction.sender == user %}
+          You sent {{ transaction.amount }} {{ transaction.currency }} to {{ transaction.recipient.username }}
+        {% else %}
+          {{ transaction.sender.username }} sent you {{ transaction.amount }} {{ transaction.currency }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  <style>
+    .button-form {
+      display: inline-block;
+    }
+
+    .buttonAccept {
+      display: inline-block;
+      width: 100px;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 4px 0;
+      margin: 4px 2px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .buttonAccept:hover {
+      background-color: #45a049;
+    }
+
+    .buttonReject {
+      display: inline-block;
+      width: 100px;
+      background-color: #bb3434;
+      color: white;
+      text-align: center;
+      padding: 5px 0;
+      margin: 4px 2px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .buttonReject:hover {
+      background-color: #973434;
+    }
+  </style>
+{% endblock %}
