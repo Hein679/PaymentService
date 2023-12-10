@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Admin Page</h2>
+  <form method="get">
+    <label for="search">Search by username:</label>
+    <input type="text" name="search" id="search" value="{{ request.GET.search }}" />
+    <button type="submit">Search</button>
+  </form>
+  <ul>
+    {% for user in users %}
+      <li>
+        <a href="{% url 'payment_service:user_transactions' user.id %}">{{ user.username }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

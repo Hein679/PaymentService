@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Dashboard</h2>
+  <p>Welcome, {{ user.username }}!</p>
+  <p>Your E-mail, {{ user.email }}</p>
+  <p>Current balance: {{ user.balance }} {{ user.currency }}</p>
+  <a href="{% url 'payment_service:send_payment' %}">Send Payment | </a>
+  <a href="{% url 'payment_service:logout' %}">Logout</a>
+{% endblock %}

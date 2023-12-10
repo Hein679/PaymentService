@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ user.username }}'s Transactions</h2>
+  <h6>Current user Balance: {{ user.balance}} {{ user.currency}}</h2>
+  <ul>
+    {% for transaction in transactions %}
+      <li>
+        {% if transaction.sender == user %}
+          {{ transaction.sender.username }} sent {{ transaction.amount }} {{ transaction.currency }} to {{ transaction.recipient.username }}
+        {% else %}
+          {{ transaction.sender.username }} received {{ transaction.amount }} {{ transaction.currency }} from {{ transaction.recipient.username }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

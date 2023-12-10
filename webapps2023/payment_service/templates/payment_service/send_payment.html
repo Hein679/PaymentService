@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Send Payment</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.amount.label_tag }} {{ form.amount }}
+    {{ form.amount.label_tag }} {{ form.currency }}
+    Recipient Email: <input type="email" name="recipient_email" id="recipient_email" required>
+    <button type="button" id="check_email">Check Email</button>
+    <p id="email_result"></p>
+    {{ form.is_request.label_tag }} {{ form.is_request }}
+    <button type="submit">Send Payment or Request</button>
+    {% if messages %}
+    <div class="container mt-3">
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success" role="alert">
+        {% elif message.tags == 'error' %}
+          <div class="alert alert-danger" role="alert">
+        {% else %}
+          <div class="alert alert-{{ message.tags }}" role="alert">
+        {% endif %}
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  
+  </form>
+  <script>
+    document.getElementById("check_email").onclick = async function() {
+      const email = document.getElementById("recipient_email").value;
+      const response = await fetch(`/webapps2023/check_email?email=${email}`);
+      const result = await response.text();
+      document.getElementById("email_result").textContent = result;
+    };
+  </script>
+{% endblock %}
